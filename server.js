@@ -32,7 +32,7 @@ server.get('/', (req, res) => {
     partials: {   
     footer: 'partials/footer',
     header: 'partials/header',
-    main: 'partials/main/landing' 
+    main: 'partials/landing' 
     }});
 });   // this is the home page
  

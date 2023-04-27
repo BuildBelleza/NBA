@@ -1,129 +1,56 @@
-const form = document.getElementById('form');
-// const data = require ('./mvp.json');
-const input = prompt("Enter search term: ");
-const results = {};
-const app = document.getElementById('app');
-const data = [{'./mvp.json': 'mvp.json'}];
+// Get references to the search input and button
+const searchInput = document.getElementById('search-input');
+const searchBtn = document.getElementById('search-btn');
 
+// Add a click event listener to the search button
+searchBtn.addEventListener('click', function() {
+  // Get the input value and convert to lowercase
+  const input = searchInput.value.toLowerCase();
+  
+  // Fetch the JSON data from your file
+   function getData() { async () => {
+    const response = await fetch('/mvp.json');
+    const data = await response.json();
+    getData();
 
-
-
-
-function search(event) {
-//   event.preventDefault();
-  const input = document.getElementById('input').value;
-  const results = [];
-    data.forEach(obj => {
-        let found = false;
-        for (let key in obj) {
-            if(!found) {
-                const value = obj[key];
-                if (isNaN(input)) {
-                    if (typeof value === 'string' && value.includes(input)) {
-                        found = true;
-                        }
-                          } else {
-                    if (typeof value === 'number' && Number(value) === Number(input)) {
-                        found = true;
-                    }
-                };
-            }
-        if (found) {results.push(obj);
+    const results = [];
+    for (let i = 0; i < data.length; i++) {
+        const obj = data[i];
+        if (obj.someField.toLowerCase().indexOf(input) !== -1 || obj.year === parseInt(input)) { // Check if any field contains the input string or year matches
+          results.push(obj); // Add matching object to results array
         }
-            }
-        });
-        return results;
-        };
-        console.log(results);
-        search();
-
-
-//   console.log(input);
-    // data.forEach(obj => {
-    //   let found = false;
-    //   for (let key in obj) {
-    //       if(!found) {
-    //           const value = obj[key];
-    //           if (isNaN(input)) {
-    //               if (typeof value === 'string' && value.includes(input)) {
-    //                   found = true;
-    //                   }
-    //                  } else {
-    //               if (typeof value === 'number' && Number(value) === Number(input)) {
-    //                   found = true;
-    //               }
-    //           };
-    //       }
-    //   if (found) {results.push(obj);
-    //   }
-    //     }
-    // });
-    // return results;
-    // };
+      }
+      // Display the search results
+      showResults(results);
+    }
+    };
 
 
 
-
-
-  const resultsContainer = document.getElementById('results');
-  resultsContainer.innerHTML = '';
-  if (results.length > 0) {
-      const listResults = document.createElement('ul');
-      results.forEach(result =>{
-          const listItem = document.createElement('li');
-          listItem.innerHTML = JSON.stringify(result);
-          listResults.appendChild(listItem);
-      });
-      resultsContainer.appendChild(listResults);
-  } else {
-      resultsContainer.innerHTML = 'No results found';
-    //   return resultsContainer;
-    //   console.log(resultsContainer);
-      
-  };
-
-function stringifyFormData(fd) {
-  const data = {};
-  for (let key of fd.keys()) {
-    data[key] = fd.get(key);
-  }
-  return JSON.stringify(data, null, 4);
-}
-
-const handleSubmit = (e) => {
-  e.preventDefault();
-  const data = new FormData(e.target);
-  const stringified = stringifyFormData(data);
-  console.log(stringified);
-};
-
-
-
-
-
-// function renderFeedbackContainer() {
-//       const div = document.createElement('div');
-//       div.className = 'feedback-container';
-      
-//       app.append(div);
-//     }; 
 
     
+    
 
-//         function renderFeedback(str) {
-//               const div = document.createElement('div');
-//               div.innerHTML = '';
-//               input.value = 'input';
-//               div.id = 'results';
-//               div.innerText = str;
-//               div.className = 'results';
-//               app.appendChild(div);
-//             }
-// renderFeedback();
 
-//             function loadHTMLElements() {
-//                 //   renderInputContainer();
-//                 //   renderBtn();
-//                   renderFeedbackContainer();
-//                 }
-//                 loadHTMLElements();
+
+    // .then(response => response.json())
+    // .then(data => {
+    //   const results = [];
+      // Loop through the JSON data to find matching objects
+      
+
+function showResults(results) {
+  let output = '';
+  // Loop through the results array and generate HTML output for each object
+  for (let i = 0; i < results.length; i++) {
+    const obj = results[i];
+    output += '<div class="result">';
+    output += '<h2>' + obj.title + '</h2>';
+    output += '<p>' + obj.description + '</p>';
+    output += '<p>Year: ' + obj.year + '</p>';
+    output += '</div>';
+  }
+  // Update the search results div with the generated HTML output
+  const searchResults = document.getElementById('search-results');
+  searchResults.innerHTML = output;
+}});
